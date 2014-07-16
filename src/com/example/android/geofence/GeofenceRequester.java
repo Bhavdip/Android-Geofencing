@@ -1,13 +1,8 @@
 package com.example.android.geofence;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationStatusCodes;
-import com.google.android.gms.location.LocationClient.OnAddGeofencesResultListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -17,9 +12,14 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationClient.OnAddGeofencesResultListener;
+import com.google.android.gms.location.LocationStatusCodes;
 
 /**
  * Class for connecting to Location Services and requesting geofences.
@@ -154,7 +154,7 @@ public class GeofenceRequester
 
         // Get a PendingIntent that Location Services issues when a geofence transition occurs
         mGeofencePendingIntent = createRequestPendingIntent();
-
+        
         // Send a request to add the current geofences
         mLocationClient.addGeofences(mCurrentGeofences, mGeofencePendingIntent, this);
     }
@@ -275,16 +275,25 @@ public class GeofenceRequester
         // If no PendingIntent exists
         } else {
 
-            // Create an Intent pointing to the IntentService
-//            Intent intent = new Intent(mActivity, ReceiveTransitionsIntentService.class);
-            Intent intent = new Intent("com.example.android.geofence.ACTION_RECEIVE_GEOFENCE");
-            /*
+           /* // Create an Intent pointing to the IntentService
+            Intent intent = new Intent(mActivity, ReceiveTransitionsIntentService.class);
+        	
              * Return a PendingIntent to start the IntentService.
              * Always create a PendingIntent sent to Location Services
              * with FLAG_UPDATE_CURRENT, so that sending the PendingIntent
              * again updates the original. Otherwise, Location Services
              * can't match the PendingIntent to requests made with it.
-             */
+             
+            
+            return PendingIntent.getService(
+                    mActivity,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);*/
+            
+        	
+            Intent intent = new Intent("com.example.android.geofence.ACTION_RECEIVE_GEOFENCE");
+            
             return PendingIntent.getBroadcast(
                     mActivity,
                     0,

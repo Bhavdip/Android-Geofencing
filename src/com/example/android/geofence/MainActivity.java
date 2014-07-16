@@ -16,6 +16,11 @@
 
 package com.example.android.geofence;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -39,15 +44,9 @@ import android.widget.Toast;
 
 import com.example.android.geofence.GeofenceUtils.REMOVE_TYPE;
 import com.example.android.geofence.GeofenceUtils.REQUEST_TYPE;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * UI handler for the Location Services Geofence sample app.
@@ -597,9 +596,9 @@ public class MainActivity extends FragmentActivity {
             Double.valueOf(mLongitude1.getText().toString()),
             Float.valueOf(mRadius1.getText().toString()),
             // Set the expiration time
-            GEOFENCE_EXPIRATION_IN_MILLISECONDS,
+            Geofence.NEVER_EXPIRE,
             // Only detect entry transitions
-            Geofence.GEOFENCE_TRANSITION_ENTER|Geofence.GEOFENCE_TRANSITION_EXIT);
+            Geofence.GEOFENCE_TRANSITION_EXIT);
 
         // Store this flat version in SharedPreferences
         mPrefs.setGeofence("1", mUIGeofence1);
@@ -615,9 +614,9 @@ public class MainActivity extends FragmentActivity {
             Double.valueOf(mLongitude2.getText().toString()),
             Float.valueOf(mRadius2.getText().toString()),
             // Set the expiration time
-            GEOFENCE_EXPIRATION_IN_MILLISECONDS,
+            Geofence.NEVER_EXPIRE,
             // Detect both entry and exit transitions
-            Geofence.GEOFENCE_TRANSITION_EXIT
+            Geofence.GEOFENCE_TRANSITION_ENTER
             );
 
         // Store this flat version in SharedPreferences
@@ -840,7 +839,9 @@ public class MainActivity extends FragmentActivity {
 
             // Check the action code and determine what to do
             String action = intent.getAction();
-
+            
+            Toast.makeText(context, action, Toast.LENGTH_SHORT).show();
+            
             // Intent contains information about errors in adding or removing geofences
             if (TextUtils.equals(action, GeofenceUtils.ACTION_GEOFENCE_ERROR)) {
 
@@ -862,7 +863,7 @@ public class MainActivity extends FragmentActivity {
             // The Intent contained an invalid action
             } else {
                 Log.e(GeofenceUtils.APPTAG, getString(R.string.invalid_action_detail, action));
-                Toast.makeText(context, R.string.invalid_action, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.invalid_action, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -873,7 +874,7 @@ public class MainActivity extends FragmentActivity {
          * @param intent The received broadcast Intent
          */
         private void handleGeofenceStatus(Context context, Intent intent) {
-
+        	 Toast.makeText(context,"ACTION_GEOFENCES_ADDED", Toast.LENGTH_SHORT).show();
         }
 
         /**
@@ -888,6 +889,7 @@ public class MainActivity extends FragmentActivity {
              * here. The current design of the app uses a notification to inform the
              * user that a transition has occurred.
              */
+        	 Toast.makeText(context,"handleGeofenceTransition", Toast.LENGTH_SHORT).show();
         }
 
         /**
@@ -898,7 +900,7 @@ public class MainActivity extends FragmentActivity {
         private void handleGeofenceError(Context context, Intent intent) {
             String msg = intent.getStringExtra(GeofenceUtils.EXTRA_GEOFENCE_STATUS);
             Log.e(GeofenceUtils.APPTAG, msg);
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         }
     }
     /**
